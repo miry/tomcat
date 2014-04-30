@@ -32,8 +32,8 @@ if node['tomcat']['deploy_manager_apps']
   tomcat_pkgs << value_for_platform(
     %w{ debian  ubuntu } => {
       'default' => "tomcat#{node['tomcat']['base_version']}-admin",
-    },
-    %w{ centos redhat fedora amazon } => {
+    },    
+    %w{ centos redhat fedora amazon scientific oracle } => {
       'default' => "tomcat#{node['tomcat']['base_version']}-admin-webapps",
     },
     )
@@ -82,7 +82,7 @@ unless node['tomcat']['truststore_file'].nil?
 end
 
 case node['platform']
-when 'centos', 'redhat', 'fedora', 'amazon'
+when 'centos', 'redhat', 'fedora', 'amazon', 'oracle'
   template "/etc/sysconfig/tomcat#{node['tomcat']['base_version']}" do
     source 'sysconfig_tomcat6.erb'
     owner 'root'
@@ -127,7 +127,7 @@ end
 if node['tomcat']['ssl_cert_file'].nil?
   execute 'Create Tomcat SSL certificate' do
     group node['tomcat']['group']
-    command "#{node['tomcat']['keytool']} -genkeypair -keystore \"#{node['tomcat']['config_dir']}/#{node['tomcat']['keystore_file']}\" -storepass \"#{node['tomcat']['keystore_password']}\" -keypass \"#{node['tomcat']['keystore_password']}\" -dname \"#{node['tomcat']['certificate_dn']}\""
+    command "#{node['tomcat']['keytool']} -genkey -keystore \"#{node['tomcat']['config_dir']}/#{node['tomcat']['keystore_file']}\" -storepass \"#{node['tomcat']['keystore_password']}\" -keypass \"#{node['tomcat']['keystore_password']}\" -dname \"#{node['tomcat']['certificate_dn']}\""
     umask 0007
     creates "#{node['tomcat']['config_dir']}/#{node['tomcat']['keystore_file']}"
     action :run

@@ -18,6 +18,7 @@
 
 default['tomcat']['base_version'] = 6
 default['tomcat']['port'] = 8080
+default['tomcat']['address'] = nil
 default['tomcat']['proxy_port'] = nil
 default['tomcat']['ssl_port'] = 8443
 default['tomcat']['ssl_proxy_port'] = nil
@@ -46,7 +47,8 @@ default['tomcat']['tomcat_auth'] = 'true'
 default['tomcat']['users'] = []
 
 case node['platform']
-when 'centos', 'redhat', 'fedora', 'amazon'
+
+when 'centos', 'redhat', 'fedora', 'amazon', 'scientific', 'oracle'
   default['tomcat']['user'] = 'tomcat'
   default['tomcat']['group'] = 'tomcat'
   default['tomcat']['home'] = "/usr/share/tomcat#{node["tomcat"]["base_version"]}"
